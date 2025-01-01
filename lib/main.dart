@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:habit_tracker_app/constants/colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -7,119 +9,669 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor: habitBG,
+        body: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //home
+                Container(
+                  margin: EdgeInsets.only(
+                      top: 100, left: 30, right: 30, bottom: 25),
+                  child: Text(
+                    "Home",
+                    style: GoogleFonts.coiny(
+                      textStyle: Theme.of(context).textTheme.displayLarge,
+                      fontSize: 40,
+                      fontWeight: FontWeight.w400,
+                      color: habitAccent2,
+                    ),
+                  ),
+                ),
+
+                //streak counter
+                Center(
+                  child: Container(
+                    width: 301,
+                    height: 62,
+                    padding: const EdgeInsets.all(20),
+                    decoration: ShapeDecoration(
+                      color: Color(0xFFFFFAE7),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    margin: EdgeInsets.only(left: 30, right: 30, bottom: 25),
+                    child: Row(children: [
+                      Text(
+                        'Current Streak',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.nunitoSans(
+                          color: habitText,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700,
+                          height: 0.92,
+                        ),
+                      ),
+                      const SizedBox(width: 38),
+                      Text(
+                        '4',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.nunitoSans(
+                          color: habitText,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700,
+                          height: 0.92,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Image.asset(
+                        'lib/assets/images/streak_flame.png',
+                        width: 16,
+                        height: 23,
+                      ),
+                    ]),
+                  ),
+                ),
+                //date picker
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 30),
+                  margin: EdgeInsets.only(bottom: 40),
+                  width: 407,
+                  height: 44,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'December',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.nunitoSans(
+                          color: Colors.black,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700,
+                          height: 0.92,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Container(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 21,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 24,
+                                    child: Text(
+                                      'Mo',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontFamily: 'Nunito Sans',
+                                        fontWeight: FontWeight.w700,
+                                        height: 1.57,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      '1',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontFamily: 'Nunito Sans',
+                                        fontWeight: FontWeight.w700,
+                                        height: 1.38,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 11),
+                            Container(
+                              width: 21,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 24,
+                                    child: Text(
+                                      'Tu',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontFamily: 'Nunito Sans',
+                                        fontWeight: FontWeight.w700,
+                                        height: 1.57,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      '2',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontFamily: 'Nunito Sans',
+                                        fontWeight: FontWeight.w700,
+                                        height: 1.38,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 11),
+                            Container(
+                              width: 21,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 24,
+                                    child: Text(
+                                      'We',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontFamily: 'Nunito Sans',
+                                        fontWeight: FontWeight.w700,
+                                        height: 1.57,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      '3',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontFamily: 'Nunito Sans',
+                                        fontWeight: FontWeight.w700,
+                                        height: 1.38,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 11),
+                            Container(
+                              width: 21,
+                              decoration: ShapeDecoration(
+                                color: Color(0xFFCC822C),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5)),
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 24,
+                                    child: Text(
+                                      'Th',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontFamily: 'Nunito Sans',
+                                        fontWeight: FontWeight.w700,
+                                        height: 1.57,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      '4',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontFamily: 'Nunito Sans',
+                                        fontWeight: FontWeight.w700,
+                                        height: 1.38,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 11),
+                            Container(
+                              width: 21,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 24,
+                                    child: Text(
+                                      'Fr',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontFamily: 'Nunito Sans',
+                                        fontWeight: FontWeight.w700,
+                                        height: 1.57,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      '5',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontFamily: 'Nunito Sans',
+                                        fontWeight: FontWeight.w700,
+                                        height: 1.38,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 11),
+                            Container(
+                              width: 21,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 24,
+                                    child: Text(
+                                      'Sa',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontFamily: 'Nunito Sans',
+                                        fontWeight: FontWeight.w700,
+                                        height: 1.57,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      '6',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontFamily: 'Nunito Sans',
+                                        fontWeight: FontWeight.w700,
+                                        height: 1.38,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 11),
+                            Container(
+                              width: 21,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 24,
+                                    child: Text(
+                                      'Su',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontFamily: 'Nunito Sans',
+                                        fontWeight: FontWeight.w700,
+                                        height: 1.57,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      '7',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontFamily: 'Nunito Sans',
+                                        fontWeight: FontWeight.w700,
+                                        height: 1.38,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                //habit list
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        margin: EdgeInsets.only(bottom: 20),
+                        decoration: ShapeDecoration(
+                          color: Color(0xFFE7CA8F),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Habit 1',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.nunitoSans(
+                                color: habitText,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w700,
+                                height: 0.92,
+                              ),
+                            ),
+                            IconButton(
+                              icon: Image.asset(
+                                  'lib/assets/icons/habit_circle_unchecked.png'),
+                              onPressed: () {},
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        margin: EdgeInsets.only(bottom: 20),
+                        decoration: ShapeDecoration(
+                          color: Color(0xFFE7CA8F),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Habit 2',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.nunitoSans(
+                                color: habitText,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w700,
+                                height: 0.92,
+                              ),
+                            ),
+                            IconButton(
+                              icon: Image.asset(
+                                  'lib/assets/icons/habit_circle_unchecked.png'),
+                              onPressed: () {},
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        margin: EdgeInsets.only(bottom: 20),
+                        decoration: ShapeDecoration(
+                          color: Color(0xFFE7CA8F),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Habit 3',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.nunitoSans(
+                                color: habitText,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w700,
+                                height: 0.92,
+                              ),
+                            ),
+                            IconButton(
+                              icon: Image.asset(
+                                  'lib/assets/icons/habit_circle_unchecked.png'),
+                              onPressed: () {},
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        margin: EdgeInsets.only(bottom: 20),
+                        decoration: ShapeDecoration(
+                          color: Color(0xFFE7CA8F),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Habit 4',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.nunitoSans(
+                                color: habitText,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w700,
+                                height: 0.92,
+                              ),
+                            ),
+                            IconButton(
+                              icon: Image.asset(
+                                  'lib/assets/icons/habit_circle_unchecked.png'),
+                              onPressed: () {},
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        margin: EdgeInsets.only(bottom: 20),
+                        decoration: ShapeDecoration(
+                          color: Color(0xFFE7CA8F),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Habit 5',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.nunitoSans(
+                                color: habitText,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w700,
+                                height: 0.92,
+                              ),
+                            ),
+                            IconButton(
+                              icon: Image.asset(
+                                  'lib/assets/icons/habit_circle_unchecked.png'),
+                              onPressed: () {},
+                            ),
+                          ],
+                        ),
+                      ),
+                      ElevatedButton(
+                        child: Text(
+                          'All Habits',
+                          style: GoogleFonts.nunitoSans(
+                            color: habitText,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            height: 0.92,
+                          ),
+                        ),
+                        onPressed: () {},
+                        style: ButtonStyle(
+                          backgroundColor:
+                              WidgetStatePropertyAll<Color>(habitPrimary),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            // Add Habit Button
+            Positioned(
+              top: 700,
+              right: 40,
+              child: IconButton(
+                icon: Image.asset('lib/assets/icons/add_habit_button.png'),
+                tooltip: 'Add new habit',
+                onPressed: () {},
+              ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: NavigationBottom(),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class NavigationBottom extends StatefulWidget {
+  const NavigationBottom({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<NavigationBottom> createState() => _NavigationBottomState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+class _NavigationBottomState extends State<NavigationBottom> {
+  int currentPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+    final ThemeData theme = Theme.of(context);
+    return NavigationBar(
+      labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+      onDestinationSelected: (int index) {
+        setState(() {
+          currentPageIndex = index;
+        });
+      },
+      backgroundColor: habitSecondary,
+      indicatorColor: Colors.transparent,
+      selectedIndex: currentPageIndex,
+      destinations: [
+        NavigationDestination(
+          selectedIcon: Image.asset(
+            'lib/assets/icons/home_on.png',
+            width: 47,
+            height: 47,
+          ),
+          icon: Image.asset(
+            'lib/assets/icons/home.png',
+            width: 47,
+            height: 47,
+          ),
+          label: 'Home',
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        NavigationDestination(
+          selectedIcon: Image.asset(
+            'lib/assets/icons/progress_on.png',
+            width: 47,
+            height: 47,
+          ),
+          icon: Image.asset(
+            'lib/assets/icons/progress.png',
+            width: 47,
+            height: 47,
+          ),
+          label: 'Notifications',
+        ),
+        NavigationDestination(
+          selectedIcon: Image.asset(
+            'lib/assets/icons/explore_on.png',
+            width: 47,
+            height: 47,
+          ),
+          icon: Image.asset(
+            'lib/assets/icons/explore.png',
+            width: 47,
+            height: 47,
+          ),
+          label: 'Notifications',
+        ),
+        NavigationDestination(
+          selectedIcon: Image.asset(
+            'lib/assets/icons/settings_on.png',
+            width: 47,
+            height: 47,
+          ),
+          icon: Image.asset(
+            'lib/assets/icons/settings.png',
+            width: 47,
+            height: 47,
+          ),
+          label: 'Messages',
+        ),
+      ],
     );
   }
 }
