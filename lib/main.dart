@@ -5,7 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:habit_tracker_app/screens/add_habit_screen.dart';
 import 'package:habit_tracker_app/screens/edit_habit_screen.dart';
 import 'package:habit_tracker_app/screens/all_habits_screen.dart';
-
+// Добавляем импорт экрана админ-панели
+import 'screens/admin_panel_screen.dart';
 import 'screens/main_screen.dart';
 
 void main() async {
@@ -49,7 +50,8 @@ class MyApp extends StatelessWidget {
         '/addHabit': (ctx) => const AddHabitScreen(),
         '/editHabit': (ctx) => const EditHabitScreen(),
         '/allHabits': (ctx) => const AllHabitsScreen(),
-        // и так далее...
+        // Новый маршрут для админ-панели:
+        '/admin': (context) => const AdminPanelScreen(),
       },
     );
   }

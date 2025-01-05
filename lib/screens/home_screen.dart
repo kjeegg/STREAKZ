@@ -92,6 +92,13 @@ class _HomeScreenState extends State<HomeScreen> {
               'Сегодня: $dateStr',
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/admin');
+              },
+              child: const Text('Admin Panel'),
+            ),
+
 
             const SizedBox(height: 16),
 
@@ -126,7 +133,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               arguments: habit)
                               .then((_) => _loadData());
                         },
+
                       ),
+
                     ],
                   ),
                 );
