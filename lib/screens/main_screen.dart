@@ -29,18 +29,6 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _screens[_currentIndex],
-
-      // Плавающая кнопка «+» (для добавления привычки)
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Переходим на экран добавления привычки
-          Navigator.pushNamed(context, '/addHabit');
-        },
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        child: Image.asset('lib/assets/icons/add_habit_button.png'),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       bottomNavigationBar: NavigationBar(
         labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
         onDestinationSelected: (int index) {
@@ -106,39 +94,6 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
       ),
-
-      // bottomNavigationBar:
-      // BottomAppBar(
-      //   shape: const CircularNotchedRectangle(),
-      //   notchMargin: 8.0,
-      //   color: Colors.white,
-      //   child: Row(
-      //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-      //     children: [
-      //       IconButton(
-      //         icon: const Icon(Icons.home),
-      //         color: _currentIndex == 0 ? Theme.of(context).primaryColor : Colors.grey,
-      //         onPressed: () => setState(() => _currentIndex = 0),
-      //       ),
-      //       IconButton(
-      //         icon: const Icon(Icons.bar_chart),
-      //         color: _currentIndex == 1 ? Theme.of(context).primaryColor : Colors.grey,
-      //         onPressed: () => setState(() => _currentIndex = 1),
-      //       ),
-      //       const SizedBox(width: 48), // пространство для FAB
-      //       IconButton(
-      //         icon: const Icon(Icons.explore),
-      //         color: _currentIndex == 2 ? Theme.of(context).primaryColor : Colors.grey,
-      //         onPressed: () => setState(() => _currentIndex = 2),
-      //       ),
-      //       IconButton(
-      //         icon: const Icon(Icons.emoji_events), // Achievements
-      //         color: _currentIndex == 3 ? Theme.of(context).primaryColor : Colors.grey,
-      //         onPressed: () => setState(() => _currentIndex = 3),
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }
