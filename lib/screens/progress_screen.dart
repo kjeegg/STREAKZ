@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import '../services/local_storage_service.dart';
+import 'package:habit_tracker_app/constants/colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ProgressScreen extends StatefulWidget {
   const ProgressScreen({Key? key}) : super(key: key);
@@ -50,20 +52,118 @@ class _ProgressScreenState extends State<ProgressScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(top: 50, left: 30, right: 30),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Progress',
-              style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 32),
+              "Progress",
+              style: GoogleFonts.coiny(
+                textStyle: Theme.of(context).textTheme.displayLarge,
+                fontSize: 40,
+                fontWeight: FontWeight.w400,
+                color: habitAccent2,
+              ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildStatItem('Streak', '$_globalStreak 🔥'),
-                _buildStatItem('Level', '$_globalLevel'),
-                _buildStatItem('XP', '$_globalXP / 50'),
+                Container(
+                  height: 136,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Streak',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.nunitoSans(
+                          color: Colors.black,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700,
+                          height: 0.92,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            '$_globalStreak',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.nunitoSans(
+                              color: Color(0xFF181611),
+                              fontSize: 40,
+                              fontWeight: FontWeight.w700,
+                              height: 0.55,
+                            ),
+                          ),
+                          Image.asset(
+                            'lib/assets/images/streak_flame.png',
+                            width: 34,
+                            height: 44,
+                          ),
+                        ],
+                      ),
+                      Text(
+                        'Best Streak: 12',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.nunitoSans(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          height: 1.83,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 136,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Level',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.nunitoSans(
+                          color: Colors.black,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700,
+                          height: 0.92,
+                        ),
+                      ),
+                      Stack(
+                        alignment: AlignmentDirectional.center,
+                        children: [
+                        Image.asset(
+                          'lib/assets/images/level_badge.png',
+                            width: 61,
+                            height: 71,
+                        ),
+                        Text(
+                          '$_globalLevel',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.nunitoSans(
+                            color: Colors.black,
+                            fontSize: 40,
+                            fontWeight: FontWeight.w700,
+                            height: 0.55,
+                          ),
+                        ),
+                      ]),
+                      Text(
+                        '$_globalXP / 50 XP',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.nunitoSans(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          height: 1.83,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 20),
