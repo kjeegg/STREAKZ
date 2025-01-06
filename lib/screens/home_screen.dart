@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import '../services/local_storage_service.dart';
 import '../models/habit_model.dart';
+import 'package:habit_tracker_app/constants/colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -41,45 +43,69 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final currentDate = DateTime.now();
-    final dateStr = '${currentDate.day}.${currentDate.month}.${currentDate.year}';
+    final dateStr =
+        '${currentDate.day}.${currentDate.month}.${currentDate.year}';
 
     return SafeArea(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(
+          left: 30,
+          right: 30,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Home',
-              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                fontSize: 36,
-                fontWeight: FontWeight.bold,
+            Container(
+              margin: EdgeInsets.only(top: 100, bottom: 25),
+              child: Text(
+                "Home",
+                style: GoogleFonts.coiny(
+                  textStyle: Theme.of(context).textTheme.displayLarge,
+                  fontSize: 40,
+                  fontWeight: FontWeight.w400,
+                  color: habitAccent2,
+                ),
               ),
             ),
-            const SizedBox(height: 12),
-
             // Блок "Current Streak"
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(15),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Current Streak',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.nunitoSans(
+                      color: habitText,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      height: 0.92,
+                    ),
                   ),
                   Row(
                     children: [
                       Text(
                         '$_globalStreak',
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.nunitoSans(
+                          color: habitText,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700,
+                          height: 0.92,
+                        ),
                       ),
                       const SizedBox(width: 6),
-                      const Text('🔥', style: TextStyle(fontSize: 18)),
+                      Image.asset(
+                        'lib/assets/images/streak_flame.png',
+                        width: 16,
+                        height: 23,
+                      ),
+
                     ],
                   ),
                 ],
@@ -99,48 +125,46 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const Text('Admin Panel'),
             ),
 
-
             const SizedBox(height: 16),
 
             // Список привычек (или текст "нет привычек")
             _habits.isEmpty
                 ? const Text(
-              'Пока нет привычек.\nНажмите "+", чтобы добавить новую.',
-              textAlign: TextAlign.center,
-            )
+                    'Пока нет привычек.\nНажмите "+", чтобы добавить новую.',
+                    textAlign: TextAlign.center,
+                  )
                 : Column(
-              children: _habits.map((habit) {
-                return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          habit.title,
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
+                    children: _habits.map((habit) {
+                      return Container(
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 14),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/editHabit',
-                              arguments: habit)
-                              .then((_) => _loadData());
-                        },
-
-                      ),
-
-                    ],
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                habit.title,
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.edit),
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/editHabit',
+                                        arguments: habit)
+                                    .then((_) => _loadData());
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
                   ),
-                );
-              }).toList(),
-            ),
           ],
         ),
       ),

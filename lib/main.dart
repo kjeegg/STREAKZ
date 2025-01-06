@@ -8,6 +8,9 @@ import 'package:habit_tracker_app/screens/all_habits_screen.dart';
 // Добавляем импорт экрана админ-панели
 import 'screens/admin_panel_screen.dart';
 import 'screens/main_screen.dart';
+import 'package:habit_tracker_app/constants/colors.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,21 +25,19 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  static const Color _bgColor = Color(0xFFFFF1D3);
-  static const Color _mainOrange = Color(0xFFFF6F00);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Habits App',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: _bgColor,
-        primaryColor: _mainOrange,
+        scaffoldBackgroundColor: habitBG,
+        primaryColor: habitPrimary,
         appBarTheme: const AppBarTheme(
-          backgroundColor: _bgColor,
+          backgroundColor: habitBG,
           elevation: 0,
           titleTextStyle: TextStyle(
-            color: _mainOrange,
+            color: habitPrimary,
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
