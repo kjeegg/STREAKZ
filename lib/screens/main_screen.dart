@@ -5,6 +5,8 @@ import 'progress_screen.dart';
 import 'explore_screen.dart';
 import 'achievements_screen.dart';
 
+/// MainScreen is a StatefulWidget that represents the main screen of the habit tracker app.
+/// It contains a PageView to navigate between different screens and a bottom navigation bar.
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
@@ -13,13 +15,13 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  // Индекс текущей вкладки
+  /// Index of the currently selected tab.
   int _currentIndex = 0;
 
-  // Контроллер PageView для перелистывания экранов
+  /// PageController to control the PageView for screen swiping.
   final PageController _pageController = PageController(initialPage: 0);
 
-  // Список экранов
+  /// List of screens to display in the PageView.
   final List<Widget> _screens = const [
     HomeScreen(),
     ProgressScreen(),
@@ -36,10 +38,9 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Вместо floatingActionButton — используем Stack в body
       body: Stack(
         children: [
-          // Анимированный PageView с экранами
+          /// PageView to swipe between different screens.
           PageView(
             controller: _pageController,
             onPageChanged: (index) {
@@ -50,29 +51,39 @@ class _MainScreenState extends State<MainScreen> {
             children: _screens,
           ),
 
-          // Позиционируем кнопку "Add Habit" где хотим
-          Positioned(
-            // Например, на 20 пикселей от правого края и на 60 пикселей выше нижнего края
-            right: 20,
-            bottom: 10,
-            child: FloatingActionButton(
-              onPressed: () {
-                // Переход на экран добавления привычки
-                Navigator.pushNamed(context, '/addHabit').then((_) {
-                  // Когда вернулись, если надо обновить HomeScreen (индекс 0)
-                  if (_currentIndex == 0) {
-                    // Например, вызвать метод обновления через GlobalKey или т.п.
-                  }
-                });
-              },
-              backgroundColor: Colors.orange,
-              child: const Icon(Icons.add),
+          /// FloatingActionButton to navigate to the add habit screen.
+      Positioned(
+        right: 20,
+        bottom: 10,
+        child: GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, '/addHabit');
+          },
+          child: Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle, // Круглая форма
+              gradient: LinearGradient(
+                colors: [Colors.orange, Colors.red],
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  spreadRadius: 3,
+                  blurRadius: 6,
+                  offset: const Offset(0, 3), // Смещение тени
+                ),
+              ],
             ),
+            child: const Icon(Icons.add, color: Colors.black, size: 36),
           ),
+        ),
+      ),
         ],
       ),
 
-      // Нижняя панель навигации
+      /// Bottom navigation bar to switch between different screens.
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
         onDestinationSelected: (newIndex) {
@@ -85,8 +96,10 @@ class _MainScreenState extends State<MainScreen> {
             curve: Curves.easeInOut,
           );
         },
+        backgroundColor: Colors.orange[100],
         destinations: [
           NavigationDestination(
+
             selectedIcon: Image.asset(
               'lib/assets/icons/home_on.png',
               width: 47,
@@ -143,6 +156,3 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
-
-
-

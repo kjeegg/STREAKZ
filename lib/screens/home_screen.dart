@@ -1,11 +1,10 @@
-// lib/screens/home_screen.dart
-
 import 'package:flutter/material.dart';
 import '../services/local_storage_service.dart';
 import '../models/habit_model.dart';
 import 'package:habit_tracker_app/constants/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+/// HomeScreen is a StatefulWidget that represents the home screen of the habit tracker app.
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -46,128 +45,139 @@ class _HomeScreenState extends State<HomeScreen> {
     final dateStr =
         '${currentDate.day}.${currentDate.month}.${currentDate.year}';
 
-    return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.only(
-          left: 30,
-          right: 30,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: EdgeInsets.only(top: 50, bottom: 25),
-              child: Text(
-                "Home",
-                style: GoogleFonts.coiny(
-                  textStyle: Theme.of(context).textTheme.displayLarge,
-                  fontSize: 40,
-                  fontWeight: FontWeight.w400,
-                  color: habitAccent2,
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.only(left: 30, right: 30),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 50, bottom: 25),
+                child: Text(
+                  "Home",
+                  style: GoogleFonts.coiny(
+                    textStyle: Theme.of(context).textTheme.displayLarge,
+                    fontSize: 40,
+                    fontWeight: FontWeight.w400,
+                    color: habitAccent2,
+                  ),
                 ),
               ),
-            ),
-            // Блок "Current Streak"
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Current Streak',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.nunitoSans(
-                      color: habitText,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      height: 0.92,
+              // Current Streak block
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Current Streak',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.nunitoSans(
+                        color: habitText,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                        height: 0.92,
+                      ),
                     ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        '$_globalStreak',
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.nunitoSans(
-                          color: habitText,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w700,
-                          height: 0.92,
+                    Row(
+                      children: [
+                        Text(
+                          '$_globalStreak',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.nunitoSans(
+                            color: habitText,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w700,
+                            height: 0.92,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 6),
-                      Image.asset(
-                        'lib/assets/images/streak_flame.png',
-                        width: 16,
-                        height: 23,
-                      ),
-
-                    ],
-                  ),
-                ],
+                        const SizedBox(width: 6),
+                        Image.asset(
+                          'lib/assets/images/streak_flame.png',
+                          width: 16,
+                          height: 23,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
+              const SizedBox(height: 12),
 
-            // Дата
-            Text(
-              'Today: $dateStr',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/admin');
-              },
-              child: const Text('Admin Panel'),
-            ),
+              // Date
+              Text(
+                'Today: $dateStr',
+                style:
+                const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/admin');
+                },
+                child: const Text('Admin Panel'),
+              ),
+              const SizedBox(height: 16),
 
-            const SizedBox(height: 16),
-
-            // Список привычек (или текст "нет привычек")
-            _habits.isEmpty
-                ? const Text(
-                    'There is no habits.\nPress "+" to add new.',
-                    textAlign: TextAlign.center,
-                  )
-                : Column(
-                    children: _habits.map((habit) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(vertical: 8),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 14),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
+              // Habit list or message
+              _habits.isEmpty
+                  ? const Text(
+                'There is no habits.\nPress "+" to add new.',
+                textAlign: TextAlign.center,
+              )
+                  : Column(
+                children: _habits.take(4).map((habit) {
+                  return Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 14),
+                    decoration: BoxDecoration(
+                      color: Colors.orange[200],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            habit.title,
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          ),
                         ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                habit.title,
-                                style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.edit),
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/editHabit',
-                                        arguments: habit)
-                                    .then((_) => _loadData());
-                              },
-                            ),
-                          ],
+                        IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/editHabit',
+                                arguments: habit)
+                                .then((_) => _loadData());
+                          },
                         ),
-                      );
-                    }).toList(),
-                  ),
-          ],
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
         ),
       ),
+      // Floating button to "All Habits" screen
+      floatingActionButton: _habits.length > 4
+          ? FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushNamed(context, '/allHabits');
+        },
+        label: const Text('All Habits'),
+        icon: const Icon(Icons.list),
+        backgroundColor: Colors.orange,
+      )
+          : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

@@ -1,9 +1,20 @@
 // lib/screens/explore_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../widgets/placeholder_image.dart';
 import 'package:habit_tracker_app/constants/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+/// A simple model for challenge items
+class ChallengeItem {
+  final String title;
+  bool isJoined;
+  ChallengeItem({
+    required this.title,
+    this.isJoined = false,
+  });
+}
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({Key? key}) : super(key: key);
@@ -15,6 +26,29 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   int _selectedTab = 0;
 
+  /// Challenge data, each item has a title and joined state
+  final List<ChallengeItem> _challenges = [
+    ChallengeItem(title: '3 Days Active Challenge'),
+    ChallengeItem(title: '7 Days Healthy Eating'),
+    ChallengeItem(title: 'Book Reading Challenge'),
+  ];
+
+  /// Learning articles
+  final List<Map<String, String>> _learningArticles = [
+    {
+      'title': 'Habits 101',
+      'url': 'https://www.heroic.us/101/habits',
+    },
+    {
+      'title': 'How to break bad habits?',
+      'url': 'https://newsinhealth.nih.gov/2012/01/breaking-bad-habits',
+    },
+    {
+      'title': 'Self-Discipline Tips',
+      'url': 'https://www.forbes.com/sites/brentgleeson/2020/08/25/8-powerful-ways-to-cultivate-extreme-self-discipline/',
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -23,6 +57,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Title: Explore
             Text(
               "Explore",
               style: GoogleFonts.coiny(
@@ -33,7 +68,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            const SizedBox(height: 16),
+            // Buttons: CHALLENGES / LEARN
             Center(
               child: Container(
                 width: 240,
@@ -49,8 +84,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       style: ButtonStyle(
                         backgroundColor: _selectedTab == 0
                             ? MaterialStateProperty.all<Color>(habitPrimary)
-                            : MaterialStateProperty.all<Color>(
-                                Colors.transparent),
+                            : MaterialStateProperty.all<Color>(Colors.transparent),
                         elevation: MaterialStateProperty.all<double>(0),
                       ),
                       child: Text(
@@ -68,8 +102,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       style: ButtonStyle(
                         backgroundColor: _selectedTab == 1
                             ? MaterialStateProperty.all<Color>(habitPrimary)
-                            : MaterialStateProperty.all<Color>(
-                                Colors.transparent),
+                            : MaterialStateProperty.all<Color>(Colors.transparent),
                         elevation: MaterialStateProperty.all<double>(0),
                       ),
                       child: Text(
@@ -86,6 +119,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 ),
               ),
             ),
+            const SizedBox(height: 16),
+
+            // Main content (CHALLENGES or LEARN tab)
             Expanded(
               child: _selectedTab == 0 ? _buildChallenges() : _buildLearn(),
             ),
@@ -95,40 +131,59 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
+  /// Builds the Challenges list
   Widget _buildChallenges() {
-    final challenges = [
-      '3 Days Active Challenge',
-      '7 Days Healthy Eating',
-      'Book Reading Challenge',
-    ];
     return ListView.builder(
-      itemCount: challenges.length,
+      itemCount: _challenges.length,
       itemBuilder: (context, index) {
+        final challenge = _challenges[index];
         return ListTile(
-          title: Text(challenges[index]),
+          title: Text(challenge.title),
+          subtitle: challenge.isJoined
+              ? const Text('You have joined this challenge!')
+              : null,
           trailing: ElevatedButton(
-            onPressed: () {},
-            child: const Text('Join'),
+            onPressed: () {
+              setState(() {
+                challenge.isJoined = !challenge.isJoined;
+              });
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: challenge.isJoined ? Colors.grey : habitPrimary,
+            ),
+            child: Text(challenge.isJoined ? 'Leave' : 'Join'),
           ),
         );
       },
     );
   }
 
+  /// Builds the Learn tab with articles
   Widget _buildLearn() {
-    final learnItems = [
-      'Habits 101',
-      'How to break bad habits?',
-      'Self-Discipline Tips',
-    ];
     return ListView.builder(
-      itemCount: learnItems.length,
+      itemCount: _learningArticles.length,
       itemBuilder: (context, index) {
+        final article = _learningArticles[index];
+        final title = article['title']!;
+        final url = article['url']!;
         return ListTile(
-          title: Text(learnItems[index]),
-          subtitle: const Text('Details...'),
+          title: Text(title),
+          subtitle: const Text('Tap to read'),
+          onTap: () => _openLink(url),
         );
       },
     );
+  }
+
+  /// Open link in default browser
+  Future<void> _openLink(String urlString) async {
+    final Uri url = Uri.parse(urlString);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not open the link')),
+      );
+    }
   }
 }
