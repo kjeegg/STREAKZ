@@ -22,6 +22,31 @@ void main() async {
 
 // Фрагмент в main.dart:
 
+Route createSlideRoute(Widget page) {
+  return PageRouteBuilder(
+    transitionDuration: const Duration(milliseconds: 400),
+    pageBuilder: (context, animation, secondaryAnimation) => page,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      // Смещение: слева (x = -1.0) -> 0.0, если хотим слева-направо
+      final begin = const Offset(1.0, 0.0); // Для перехода справа-налево
+      final end = Offset.zero;
+      final curve = Curves.easeInOut;
+
+      final tween = Tween(begin: begin, end: end).chain(
+        CurveTween(curve: curve),
+      );
+      final offsetAnimation = animation.drive(tween);
+
+      return SlideTransition(
+        position: offsetAnimation,
+        child: child,
+      );
+    },
+  );
+}
+
+
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -55,6 +80,6 @@ class MyApp extends StatelessWidget {
         '/admin': (context) => const AdminPanelScreen(),
       },
     );
-  }
+      }
 }
 

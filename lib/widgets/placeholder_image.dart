@@ -14,7 +14,7 @@ class PlaceholderImage extends StatelessWidget {
       color: Colors.grey.withOpacity(0.3),
       padding: const EdgeInsets.all(8.0),
       child: Text(
-        'Заглушка: $placeholderName',
+        'Placeholder: $placeholderName',
         textAlign: TextAlign.center,
         style: const TextStyle(color: Colors.black54),
       ),

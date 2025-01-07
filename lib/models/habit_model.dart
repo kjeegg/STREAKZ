@@ -1,12 +1,12 @@
-// lib/models/habit_model.dart
-
 class Habit {
   String title;
-  List<bool> days;  // дни недели [Пн..Вс], отмечаем true/false
-  String time;      // например, "09:00"
-  String reminder;  // например, "Never", "Once a day"
-  int colorIndex;   // индекс цвета
-  int streakCount;  // пример: счётчик стрика по данной привычке
+  List<bool> days;
+  String time;
+  String reminder;
+  int colorIndex;
+  int streakCount;
+  DateTime? startDate;
+  bool isDone;
 
   Habit({
     required this.title,
@@ -15,6 +15,8 @@ class Habit {
     required this.reminder,
     required this.colorIndex,
     this.streakCount = 0,
+    this.startDate,
+    this.isDone = false,
   });
 
   Map<String, dynamic> toMap() {
@@ -25,17 +27,23 @@ class Habit {
       'reminder': reminder,
       'colorIndex': colorIndex,
       'streakCount': streakCount,
+      'startDate': startDate?.millisecondsSinceEpoch,
+      'isDone': isDone ? 1 : 0,
     };
   }
 
   static Habit fromMap(Map<String, dynamic> map) {
     return Habit(
       title: map['title'] ?? '',
-      days: (map['days'] as List).map((val) => val == 1).toList(),
+      days: (map['days'] as List).map((e) => e == 1).toList(),
       time: map['time'] ?? '',
       reminder: map['reminder'] ?? 'Never',
       colorIndex: map['colorIndex'] ?? 0,
       streakCount: map['streakCount'] ?? 0,
+      startDate: map['startDate'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['startDate'])
+          : null,
+      isDone: (map['isDone'] ?? 0) == 1,
     );
   }
 }

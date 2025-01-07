@@ -1,6 +1,8 @@
 // lib/screens/achievements_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../constants/colors.dart';
 import '../widgets/placeholder_image.dart';
 
 class AchievementsScreen extends StatelessWidget {
@@ -18,14 +20,19 @@ class AchievementsScreen extends StatelessWidget {
 
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(top: 50, left: 30, right: 30),
         child: Column(
           children: [
             Text(
-              'Achievements',
-              style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 32),
+              "Achievements",
+              style: GoogleFonts.coiny(
+                textStyle: Theme.of(context).textTheme.displayLarge,
+                fontSize: 40,
+                fontWeight: FontWeight.w400,
+                color: habitAccent2,
+              ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 30),
             // Заглушка картинки или реальная картинка
             const PlaceholderImage(placeholderName: 'Achievements Banner'),
             const SizedBox(height: 16),

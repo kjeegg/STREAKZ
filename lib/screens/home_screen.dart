@@ -47,34 +47,50 @@ class _HomeScreenState extends State<HomeScreen> {
         '${currentDate.day}.${currentDate.month}.${currentDate.year}';
 
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 50.0, left: 30.0, right: 30.0),
-        child: Stack(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.only(
+          left: 30,
+          right: 30,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Home",
-                  style: GoogleFonts.coiny(
-                    textStyle: Theme.of(context).textTheme.displayLarge,
-                    fontSize: 40,
-                    fontWeight: FontWeight.w400,
-                    color: habitAccent2,
-                  ),
+            Container(
+              margin: EdgeInsets.only(top: 50, bottom: 25),
+              child: Text(
+                "Home",
+                style: GoogleFonts.coiny(
+                  textStyle: Theme.of(context).textTheme.displayLarge,
+                  fontSize: 40,
+                  fontWeight: FontWeight.w400,
+                  color: habitAccent2,
                 ),
-                SizedBox(height: 15),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
+              ),
+            ),
+            // Блок "Current Streak"
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Current Streak',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.nunitoSans(
+                      color: habitText,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      height: 0.92,
+                    ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Row(
                     children: [
                       Text(
-                        'Current Streak',
+                        '$_globalStreak',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.nunitoSans(
                           color: habitText,
@@ -83,97 +99,72 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 0.92,
                         ),
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            '$_globalStreak',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.nunitoSans(
-                              color: habitText,
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700,
-                              height: 0.92,
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          Image.asset(
-                            'lib/assets/images/streak_flame.png',
-                            width: 16,
-                            height: 23,
-                          ),
-                        ],
+                      const SizedBox(width: 6),
+                      Image.asset(
+                        'lib/assets/images/streak_flame.png',
+                        width: 16,
+                        height: 23,
                       ),
+
                     ],
                   ),
-                ),
-                const SizedBox(height: 12),
-                
-                // Дата
-                Text(
-                  'Сегодня: $dateStr',
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/admin');
-                  },
-                  child: const Text('Admin Panel'),
-                ),
-        
-                const SizedBox(height: 16),
-        
-                // Список привычек (или текст "нет привычек")
-                _habits.isEmpty
-                    ? const Text(
-                        'Пока нет привычек.\nНажмите "+", чтобы добавить новую.',
-                        textAlign: TextAlign.center,
-                      )
-                    : Column(
-                        children: _habits.map((habit) {
-                          return Container(
-                            margin: const EdgeInsets.symmetric(vertical: 8),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 14),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+
+            // Дата
+            Text(
+              'Today: $dateStr',
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/admin');
+              },
+              child: const Text('Admin Panel'),
+            ),
+
+            const SizedBox(height: 16),
+
+            // Список привычек (или текст "нет привычек")
+            _habits.isEmpty
+                ? const Text(
+                    'There is no habits.\nPress "+" to add new.',
+                    textAlign: TextAlign.center,
+                  )
+                : Column(
+                    children: _habits.map((habit) {
+                      return Container(
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 14),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                habit.title,
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w500),
+                              ),
                             ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    habit.title,
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.edit),
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, '/editHabit',
-                                            arguments: habit)
-                                        .then((_) => _loadData());
-                                  },
-                                ),
-                              ],
+                            IconButton(
+                              icon: const Icon(Icons.edit),
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/editHabit',
+                                        arguments: habit)
+                                    .then((_) => _loadData());
+                              },
                             ),
-                          );
-                        }).toList(),
-                      ),
-              ],
-            ),
-            Positioned(
-              bottom: 20,
-              right: 0,
-              child: IconButton(
-                onPressed: () {
-                Navigator.pushNamed(context, '/addHabit');
-                },
-                icon: Image.asset('lib/assets/icons/add_habit_button.png'),
-            ),
-            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
           ],
         ),
       ),

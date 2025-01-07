@@ -1,8 +1,5 @@
-// lib/screens/main_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:habit_tracker_app/constants/colors.dart';
-
 import 'home_screen.dart';
 import 'progress_screen.dart';
 import 'explore_screen.dart';
@@ -16,8 +13,13 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  // Индекс текущей вкладки
   int _currentIndex = 0;
 
+  // Контроллер PageView для перелистывания экранов
+  final PageController _pageController = PageController(initialPage: 0);
+
+  // Список экранов
   final List<Widget> _screens = const [
     HomeScreen(),
     ProgressScreen(),
@@ -26,19 +28,63 @@ class _MainScreenState extends State<MainScreen> {
   ];
 
   @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_currentIndex],
+      // Вместо floatingActionButton — используем Stack в body
+      body: Stack(
+        children: [
+          // Анимированный PageView с экранами
+          PageView(
+            controller: _pageController,
+            onPageChanged: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            children: _screens,
+          ),
+
+          // Позиционируем кнопку "Add Habit" где хотим
+          Positioned(
+            // Например, на 20 пикселей от правого края и на 60 пикселей выше нижнего края
+            right: 20,
+            bottom: 10,
+            child: FloatingActionButton(
+              onPressed: () {
+                // Переход на экран добавления привычки
+                Navigator.pushNamed(context, '/addHabit').then((_) {
+                  // Когда вернулись, если надо обновить HomeScreen (индекс 0)
+                  if (_currentIndex == 0) {
+                    // Например, вызвать метод обновления через GlobalKey или т.п.
+                  }
+                });
+              },
+              backgroundColor: Colors.orange,
+              child: const Icon(Icons.add),
+            ),
+          ),
+        ],
+      ),
+
+      // Нижняя панель навигации
       bottomNavigationBar: NavigationBar(
-        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-        onDestinationSelected: (int index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        backgroundColor: habitSecondary,
-        indicatorColor: Colors.transparent,
         selectedIndex: _currentIndex,
+        onDestinationSelected: (newIndex) {
+          setState(() {
+            _currentIndex = newIndex;
+          });
+          _pageController.animateToPage(
+            newIndex,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        },
         destinations: [
           NavigationDestination(
             selectedIcon: Image.asset(
@@ -64,7 +110,7 @@ class _MainScreenState extends State<MainScreen> {
               width: 47,
               height: 47,
             ),
-            label: 'Notifications',
+            label: 'Progress',
           ),
           NavigationDestination(
             selectedIcon: Image.asset(
@@ -77,7 +123,7 @@ class _MainScreenState extends State<MainScreen> {
               width: 47,
               height: 47,
             ),
-            label: 'Notifications',
+            label: 'Explore',
           ),
           NavigationDestination(
             selectedIcon: Image.asset(
@@ -90,10 +136,13 @@ class _MainScreenState extends State<MainScreen> {
               width: 47,
               height: 47,
             ),
-            label: 'Messages',
+            label: 'Achievements',
           ),
         ],
       ),
     );
   }
 }
+
+
+
