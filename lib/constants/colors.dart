@@ -7,3 +7,4 @@ const Color habitAccent = Color(0xFFE7CA8F);
 const Color habitAccent2 = Color(0xFFEB5600);
 const Color habitText = Color(0xFF181611);
 const Color habitWhite = Color(0xFFFFFBE8);
+const Color habitGrey = Color(0xFFA19974);
