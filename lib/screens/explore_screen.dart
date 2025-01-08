@@ -61,6 +61,15 @@ class _ExploreScreenState extends State<ExploreScreen> {
       'url':
           'https://www.forbes.com/sites/brentgleeson/2020/08/25/8-powerful-ways-to-cultivate-extreme-self-discipline/',
     },
+    {
+      'title': '12 Habits to Prevent Brain Rot',
+      'url': 'https://www.health.com/habits-to-prevent-brain-rot-8766150',
+    },
+    {
+      'title': '10 Habits for Good Health',
+      'url':
+          'https://www.health.harvard.edu/staying-healthy/10-habits-for-good-health',
+    },
   ];
 
   @override
@@ -206,9 +215,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
                           style: GoogleFonts.nunitoSans(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
-                            color: challenge.isJoined ? const Color.fromARGB(255, 94, 93, 93) : habitText,
+                            color: challenge.isJoined
+                                ? const Color.fromARGB(255, 94, 93, 93)
+                                : habitText,
                           ),
-                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -243,19 +254,50 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
+  
   /// Builds the Learn tab with articles
   Widget _buildLearn() {
     return ListView.builder(
+      physics: ClampingScrollPhysics(),
+      shrinkWrap: true,
+      scrollDirection: Axis.horizontal,
       itemCount: _learningArticles.length,
       itemBuilder: (context, index) {
         final article = _learningArticles[index];
         final title = article['title']!;
         final url = article['url']!;
-        return ListTile(
-          title: Text(title),
-          subtitle: const Text('Tap to read'),
-          onTap: () => _openLink(url),
+        return Container(
+          margin: EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Container(
+                color: habitWhite,
+                child: IconButton(
+                  icon: Image.asset(
+                    'lib/assets/images/challenge_code.png',
+                    width: 100,
+                    height: 100,
+                  ),
+                  onPressed: () => _openLink(url),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 5.0),
+                width: 100,
+                child: Text(title,
+                    style: GoogleFonts.nunitoSans(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 12,
+                    )),
+              ),
+            ],
+          ),
         );
+        // return ListTile(
+        //   title: Text(title),
+        //   subtitle: const Text('Tap to read'),
+        //   onTap: () => _openLink(url),
+        // );
       },
     );
   }
