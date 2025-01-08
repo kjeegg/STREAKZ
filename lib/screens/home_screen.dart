@@ -204,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               label: const Text('All Habits'),
               icon: const Icon(Icons.list),
-              backgroundColor: Colors.orange,
+              backgroundColor: habitPrimary,
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
