@@ -143,9 +143,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               Expanded(
                                 child: Text(
                                   habit.title,
-                                  style: const TextStyle(
+                                  style: GoogleFonts.nunitoSans(
                                       fontSize: 16,
-                                      fontWeight: FontWeight.w500),
+                                      fontWeight: FontWeight.w700),
                                 ),
                               ),
                               IconButton(
