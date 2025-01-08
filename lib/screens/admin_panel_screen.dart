@@ -1,5 +1,3 @@
-// lib/screens/admin_panel_screen.dart
-
 import 'package:flutter/material.dart';
 import '../services/local_storage_service.dart';
 import '../models/habit_model.dart';
@@ -28,17 +26,15 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
     });
   }
 
-  // Очистка всех привычек
   Future<void> _clearAllHabits() async {
-    await _storageService.saveHabits([]); // Пустой список = удаляем все привычки
+    await _storageService.saveHabits([]);
     await _loadHabits();
+    Navigator.pop(context, true); // Возвращаем true для обновления главного экрана
   }
 
-  // Добавление тестовых привычек
   Future<void> _addTestHabits() async {
     final existingHabits = await _storageService.loadHabits();
 
-    // Пример тестовых привычек
     final List<Habit> testHabits = [
       Habit(
         title: 'Meditate 5 min (Test)',
@@ -56,10 +52,10 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
       ),
     ];
 
-    // Просто дополняем список текущих
     existingHabits.addAll(testHabits);
     await _storageService.saveHabits(existingHabits);
     await _loadHabits();
+    Navigator.pop(context, true); // Возвращаем true для обновления главного экрана
   }
 
   @override
@@ -72,22 +68,17 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Кнопка очистки
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
               onPressed: _clearAllHabits,
               child: const Text('Clear All Habits'),
             ),
             const SizedBox(height: 10),
-
-            // Кнопка добавления тестовых привычек
             ElevatedButton(
               onPressed: _addTestHabits,
               child: const Text('Add Test Habits'),
             ),
             const SizedBox(height: 20),
-
-            // Отображаем список текущих привычек
             Text(
               'Current habits:',
               style: Theme.of(context).textTheme.titleLarge,
@@ -125,7 +116,6 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
     );
   }
 
-  // Просто переводим [true, false, true, ...] в "M, W, F" и т.д.
   String _formatDays(List<bool> days) {
     final dayLabels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
     List<String> selectedDays = [];

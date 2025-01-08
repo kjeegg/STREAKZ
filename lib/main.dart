@@ -77,7 +77,7 @@ class MyApp extends StatelessWidget {
         '/addHabit': (ctx) => const AddHabitScreen(),
         '/editHabit': (ctx) => const EditHabitScreen(),
         '/allHabits': (ctx) => const AllHabitsScreen(),
-        '/admin': (context) => const AdminPanelScreen(),
+        '/admin': (context) => AdminPanelScreen(),
       },
     );
   }

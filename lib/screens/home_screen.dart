@@ -27,6 +27,10 @@ class _HomeScreenState extends State<HomeScreen> {
     _loadData();
   }
 
+  void onUpdateHabits() {
+    _loadData();
+  }
+
   Future<void> _loadData() async {
     final habits = await _storageService.loadHabits();
     final streak = await _storageService.loadGlobalStreak();
@@ -120,10 +124,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/admin');
+                      Navigator.pushNamed(context, '/admin').then((result) {
+                        if (result == true) {
+                          _loadData(); // Обновляем данные после возврата
+                        }
+                      });
                     },
                     child: const Text('Admin Panel'),
                   ),
+
                   const SizedBox(height: 16),
 
                   Expanded(
@@ -170,14 +179,18 @@ class _HomeScreenState extends State<HomeScreen> {
               right: 20,
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, '/addHabit');
+                  Navigator.pushNamed(context, '/addHabit').then((result) {
+                    if (result == true) {
+                      _loadData(); // Обновляем данные после возврата
+                    }
+                  });
                 },
                 child: Container(
                   width: 60,
                   height: 60,
                   decoration: BoxDecoration(
-                    shape: BoxShape.circle, // Круглая форма
-                    gradient: LinearGradient(
+                    shape: BoxShape.circle,
+                    gradient: const LinearGradient(
                       colors: [Colors.orange, Colors.red],
                     ),
                     boxShadow: [
@@ -185,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: Colors.black.withOpacity(0.2),
                         spreadRadius: 3,
                         blurRadius: 6,
-                        offset: const Offset(0, 3), // Смещение тени
+                        offset: const Offset(0, 3),
                       ),
                     ],
                   ),
@@ -193,6 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
+
           ],
         ),
       ),

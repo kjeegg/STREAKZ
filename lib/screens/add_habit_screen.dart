@@ -33,7 +33,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
     final habits = await _storageService.loadHabits();
     habits.add(newHabit);
     await _storageService.saveHabits(habits);
-    Navigator.pop(context);
+    Navigator.pop(context, true);
   }
 
   @override
