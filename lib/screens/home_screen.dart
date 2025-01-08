@@ -19,6 +19,8 @@ class _HomeScreenState extends State<HomeScreen> {
   int _level = 1;
   int _xp = 0;
 
+  final List<bool> completed = [false, false, false, false, false];
+
   @override
   void initState() {
     super.initState();
@@ -47,47 +49,36 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.only(left: 30, right: 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(top: 50, bottom: 25),
-                child: Text(
-                  "Home",
-                  style: GoogleFonts.coiny(
-                    textStyle: Theme.of(context).textTheme.displayLarge,
-                    fontSize: 40,
-                    fontWeight: FontWeight.w400,
-                    color: habitAccent2,
-                  ),
-                ),
-              ),
-              // Current Streak block
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Current Streak',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.nunitoSans(
-                        color: habitText,
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                        height: 0.92,
-                      ),
+        child: Stack(
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.only(top: 50.0, left: 30.0, right: 30.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Home",
+                    style: GoogleFonts.coiny(
+                      textStyle: Theme.of(context).textTheme.displayLarge,
+                      fontSize: 40,
+                      fontWeight: FontWeight.w400,
+                      color: habitAccent2,
                     ),
-                    Row(
+                  ),
+                  SizedBox(height: 20.0),
+                  // Current Streak block
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '$_globalStreak',
+                          'Current Streak',
                           textAlign: TextAlign.center,
                           style: GoogleFonts.nunitoSans(
                             color: habitText,
@@ -96,88 +87,127 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: 0.92,
                           ),
                         ),
-                        const SizedBox(width: 6),
-                        Image.asset(
-                          'lib/assets/images/streak_flame.png',
-                          width: 16,
-                          height: 23,
+                        Row(
+                          children: [
+                            Text(
+                              '$_globalStreak',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.nunitoSans(
+                                color: habitText,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w700,
+                                height: 0.92,
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            Image.asset(
+                              'lib/assets/images/streak_flame.png',
+                              width: 16,
+                              height: 23,
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Date
+                  Text(
+                    'Today: $dateStr',
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/admin');
+                    },
+                    child: const Text('Admin Panel'),
+                  ),
+                  const SizedBox(height: 16),
+
+                  Expanded(
+                    child: ListView(
+                      padding: const EdgeInsets.only(bottom: 80),
+                      children: _habits.map((habit) {
+                        return Container(
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 14),
+                          decoration: BoxDecoration(
+                            color: habitAccent,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  habit.title,
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/editHabit',
+                                          arguments: habit)
+                                      .then((_) => _loadData());
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              bottom: 20,
+              right: 20,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, '/addHabit');
+                },
+                child: Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle, // Круглая форма
+                    gradient: LinearGradient(
+                      colors: [Colors.orange, Colors.red],
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 3,
+                        blurRadius: 6,
+                        offset: const Offset(0, 3), // Смещение тени
+                      ),
+                    ],
+                  ),
+                  child: const Icon(Icons.add, color: Colors.black, size: 36),
                 ),
               ),
-              const SizedBox(height: 12),
-
-              // Date
-              Text(
-                'Today: $dateStr',
-                style:
-                const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/admin');
-                },
-                child: const Text('Admin Panel'),
-              ),
-              const SizedBox(height: 16),
-
-              // Habit list or message
-              _habits.isEmpty
-                  ? const Text(
-                'There is no habits.\nPress "+" to add new.',
-                textAlign: TextAlign.center,
-              )
-                  : Column(
-                children: _habits.take(4).map((habit) {
-                  return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 14),
-                    decoration: BoxDecoration(
-                      color: Colors.orange[200],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            habit.title,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/editHabit',
-                                arguments: habit)
-                                .then((_) => _loadData());
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                }).toList(),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       // Floating button to "All Habits" screen
-      floatingActionButton: _habits.length > 4
+      floatingActionButton: _habits.length > 0
           ? FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.pushNamed(context, '/allHabits');
-        },
-        label: const Text('All Habits'),
-        icon: const Icon(Icons.list),
-        backgroundColor: Colors.orange,
-      )
+              onPressed: () {
+                Navigator.pushNamed(context, '/allHabits');
+              },
+              label: const Text('All Habits'),
+              icon: const Icon(Icons.list),
+              backgroundColor: Colors.orange,
+            )
           : null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

@@ -38,49 +38,14 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          /// PageView to swipe between different screens.
-          PageView(
-            controller: _pageController,
-            onPageChanged: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
-            children: _screens,
-          ),
-
-          /// FloatingActionButton to navigate to the add habit screen.
-      Positioned(
-        right: 20,
-        bottom: 10,
-        child: GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, '/addHabit');
-          },
-          child: Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle, // Круглая форма
-              gradient: LinearGradient(
-                colors: [Colors.orange, Colors.red],
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  spreadRadius: 3,
-                  blurRadius: 6,
-                  offset: const Offset(0, 3), // Смещение тени
-                ),
-              ],
-            ),
-            child: const Icon(Icons.add, color: Colors.black, size: 36),
-          ),
-        ),
-      ),
-        ],
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        children: _screens,
       ),
 
       /// Bottom navigation bar to switch between different screens.
