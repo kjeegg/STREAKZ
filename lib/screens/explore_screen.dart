@@ -10,10 +10,11 @@ import 'package:google_fonts/google_fonts.dart';
 class ChallengeItem {
   final String title;
   bool isJoined;
-  ChallengeItem({
-    required this.title,
-    this.isJoined = false,
-  });
+  String imageSource;
+  ChallengeItem(
+      {required this.title,
+      this.isJoined = false,
+      this.imageSource = 'lib/assets/images/challenge_active.png'});
 }
 
 class ExploreScreen extends StatefulWidget {
@@ -28,9 +29,21 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   /// Challenge data, each item has a title and joined state
   final List<ChallengeItem> _challenges = [
-    ChallengeItem(title: '3 Days Active Challenge'),
-    ChallengeItem(title: '7 Days Healthy Eating'),
-    ChallengeItem(title: 'Book Reading Challenge'),
+    ChallengeItem(
+        title: '3 Days Active Challenge',
+        imageSource: 'lib/assets/images/challenge_active.png'),
+    ChallengeItem(
+        title: '7 Days Healthy Eating',
+        imageSource: 'lib/assets/images/challenge_eat_healthy.png'),
+    ChallengeItem(
+        title: 'Book Reading Challenge',
+        imageSource: 'lib/assets/images/challenge_read.png'),
+    ChallengeItem(
+        title: 'Gratitude Journal Challenge',
+        imageSource: 'lib/assets/images/challenge_gratitude.png'),
+    ChallengeItem(
+        title: '7 Days Meditation',
+        imageSource: 'lib/assets/images/challenge_meditation.png'),
   ];
 
   /// Learning articles
@@ -45,7 +58,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
     },
     {
       'title': 'Self-Discipline Tips',
-      'url': 'https://www.forbes.com/sites/brentgleeson/2020/08/25/8-powerful-ways-to-cultivate-extreme-self-discipline/',
+      'url':
+          'https://www.forbes.com/sites/brentgleeson/2020/08/25/8-powerful-ways-to-cultivate-extreme-self-discipline/',
     },
   ];
 
@@ -84,7 +98,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       style: ButtonStyle(
                         backgroundColor: _selectedTab == 0
                             ? MaterialStateProperty.all<Color>(habitPrimary)
-                            : MaterialStateProperty.all<Color>(Colors.transparent),
+                            : MaterialStateProperty.all<Color>(
+                                Colors.transparent),
                         elevation: MaterialStateProperty.all<double>(0),
                       ),
                       child: Text(
@@ -102,7 +117,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       style: ButtonStyle(
                         backgroundColor: _selectedTab == 1
                             ? MaterialStateProperty.all<Color>(habitPrimary)
-                            : MaterialStateProperty.all<Color>(Colors.transparent),
+                            : MaterialStateProperty.all<Color>(
+                                Colors.transparent),
                         elevation: MaterialStateProperty.all<double>(0),
                       ),
                       child: Text(
@@ -137,23 +153,92 @@ class _ExploreScreenState extends State<ExploreScreen> {
       itemCount: _challenges.length,
       itemBuilder: (context, index) {
         final challenge = _challenges[index];
-        return ListTile(
-          title: Text(challenge.title),
-          subtitle: challenge.isJoined
-              ? const Text('You have joined this challenge!')
-              : null,
-          trailing: ElevatedButton(
-            onPressed: () {
-              setState(() {
-                challenge.isJoined = !challenge.isJoined;
-              });
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: challenge.isJoined ? Colors.grey : habitPrimary,
+        return Container(
+            padding: EdgeInsets.all(15.0),
+            margin: EdgeInsets.symmetric(vertical: 8.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              color: habitWhite,
             ),
-            child: Text(challenge.isJoined ? 'Leave' : 'Join'),
-          ),
-        );
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  height: 150,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        width: 150,
+                        child: Text(
+                          challenge.title,
+                          style: GoogleFonts.nunitoSans(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                            color: habitText,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 150,
+                        child: Text(
+                          '+30 XP when completed',
+                          style: GoogleFonts.nunitoSans(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12,
+                            color: const Color.fromARGB(255, 76, 75, 75),
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            challenge.isJoined = !challenge.isJoined;
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              challenge.isJoined ? habitAccent : habitPrimary,
+                        ),
+                        child: Text(
+                          challenge.isJoined ? 'Leave' : 'Join',
+                          style: GoogleFonts.nunitoSans(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: challenge.isJoined ? const Color.fromARGB(255, 94, 93, 93) : habitText,
+                          ),
+                          ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  child: Image.asset(
+                    challenge.imageSource,
+                    width: 150,
+                    height: 150,
+                  ),
+                ),
+              ],
+            ));
+        // return ListTile(
+        //   title: Text(challenge.title),
+        //   subtitle: challenge.isJoined
+        //       ? const Text('You have joined this challenge!')
+        //       : null,
+        //   trailing: ElevatedButton(
+        //     onPressed: () {
+        //       setState(() {
+        //         challenge.isJoined = !challenge.isJoined;
+        //       });
+        //     },
+        //     style: ElevatedButton.styleFrom(
+        //       backgroundColor: challenge.isJoined ? Colors.grey : habitPrimary,
+        //     ),
+        //     child: Text(challenge.isJoined ? 'Leave' : 'Join'),
+        //   ),
+        // );
       },
     );
   }
