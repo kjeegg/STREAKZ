@@ -37,39 +37,14 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // Вместо floatingActionButton — используем Stack в body
-      body: Stack(
-        children: [
-          // Анимированный PageView с экранами
-          PageView(
-            controller: _pageController,
-            onPageChanged: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
-            children: _screens,
-          ),
-
-          // Позиционируем кнопку "Add Habit" где хотим
-          Positioned(
-            // Например, на 20 пикселей от правого края и на 60 пикселей выше нижнего края
-            right: 20,
-            bottom: 10,
-            child: FloatingActionButton(
-              onPressed: () {
-                // Переход на экран добавления привычки
-                Navigator.pushNamed(context, '/addHabit').then((_) {
-                  // Когда вернулись, если надо обновить HomeScreen (индекс 0)
-                  if (_currentIndex == 0) {
-                    // Например, вызвать метод обновления через GlobalKey или т.п.
-                  }
-                });
-              },
-              backgroundColor: Colors.orange,
-              child: const Icon(Icons.add),
-            ),
-          ),
-        ],
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        children: _screens,
       ),
 
       // Нижняя панель навигации
