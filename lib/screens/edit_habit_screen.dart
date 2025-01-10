@@ -22,6 +22,8 @@ class _EditHabitScreenState extends State<EditHabitScreen> {
   String _time = '09:00';
   String _reminder = 'Never';
   int _colorIndex = 0;
+// 1. Добавим переменную для хранения старого названия
+  late String _oldTitle;
 
   @override
   void didChangeDependencies() {
@@ -30,6 +32,7 @@ class _EditHabitScreenState extends State<EditHabitScreen> {
     if (arg is Habit) {
       _habit = arg;
       _titleController.text = _habit!.title;
+      _oldTitle = _habit!.title; // Сохраняем старое название
       _days = List<bool>.from(_habit!.days);
       _time = _habit!.time;
       _reminder = _habit!.reminder;
@@ -40,6 +43,7 @@ class _EditHabitScreenState extends State<EditHabitScreen> {
   Future<void> _updateHabit() async {
     if (_habit == null) return;
 
+    // Присваиваем полям новые значения
     _habit!
       ..title = _titleController.text
       ..days = _days
@@ -48,22 +52,41 @@ class _EditHabitScreenState extends State<EditHabitScreen> {
       ..colorIndex = _colorIndex;
 
     final habits = await _storageService.loadHabits();
-    final index = habits.indexWhere((h) => h.title == _habit!.title);
-    if (index != -1) {
-      habits[index] = _habit!;
-    }
-    await _storageService.saveHabits(habits);
 
-    Navigator.pop(context);
+    // 2. Ищем по старому названию
+    final index = habits.indexWhere((h) => h.title == _oldTitle);
+
+    if (index != -1) {
+      print('_habit!.time = ${_habit!.time}');
+      print('_habit!.reminder = ${_habit!.reminder}');
+      print('Будем сохранять index = $index в списке habits');
+
+      habits[index] = _habit!;
+      await _storageService.saveHabits(habits);
+      Navigator.pop(context, true);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Habit not found in storage!')),
+      );
+    }
   }
+
+
 
   Future<void> _deleteHabit() async {
     if (_habit == null) return;
+
     final habits = await _storageService.loadHabits();
+
+    // Удаляем привычку из списка
     habits.removeWhere((h) => h.title == _habit!.title);
+
+    // Сохраняем обновленный список
     await _storageService.saveHabits(habits);
-    Navigator.pop(context);
+
+    Navigator.pop(context, true); // Возвращаем результат успешного удаления
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -208,10 +231,12 @@ class _EditHabitScreenState extends State<EditHabitScreen> {
                               (t) => DropdownMenuItem(value: t, child: Text(t)))
                           .toList(),
                       onChanged: (val) {
+                        print('Выбрали val=$val');
                         setState(() {
                           _time = val ?? '09:00';
                         });
                       },
+
                     ),
                   ),
                 ),
