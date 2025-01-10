@@ -135,13 +135,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 12),
 
-                  // -----------------------------
-                  // РЯД: "Название месяца" слева + "7 дней" справа
-                  // -----------------------------
+
         Row(
-          // Месяц слева, дни справа
+
           children: [
-            // 1) Название месяца
+
             Text(
               currentMonthName,
               style: GoogleFonts.nunitoSans(
@@ -151,10 +149,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            // 2) Пространство между месяцем и днями
+            //
             const SizedBox(width: 16),
 
-            // 3) Блок с днями ( Expanded или Flexible )
+            //
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -204,13 +202,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
                   // -----------------------------
-                  // Кнопка Admin Panel
+                  // Button Admin Panel
                   // -----------------------------
                   ElevatedButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/admin').then((result) {
                         if (result == true) {
-                          _loadData(); // Обновляем данные после возврата
+                          _loadData();
                         }
                       });
                     },
@@ -219,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 16),
 
                   // -----------------------------
-                  // Список привычек для выбранного дня (_selectedDayIndex)
+                  //  (_selectedDayIndex)
                   // -----------------------------
                   Expanded(
                     child: ListView(
@@ -249,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   style: textStyle,
                                 ),
                               ),
-                              // Иконка isDone
+                              // Icon isDone
                               IconButton(
                                 icon: habit.isDone
                                     ? const Icon(Icons.check_circle)
@@ -262,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   await _storageService.saveHabits(_habits);
                                 },
                               ),
-                              // Иконка редактировать
+
                               IconButton(
                                 icon: const Icon(Icons.edit),
                                 onPressed: () {

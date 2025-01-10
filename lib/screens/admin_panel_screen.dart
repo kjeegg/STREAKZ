@@ -37,6 +37,7 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
 
     final List<Habit> testHabits = [
       Habit(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
         title: 'Meditate 5 min (Test)',
         days: [true, false, true, false, true, false, false],
         time: '09:00',
@@ -44,6 +45,7 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
         colorIndex: 1,
       ),
       Habit(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
         title: 'Read 10 pages (Test)',
         days: [true, true, false, false, true, true, false],
         time: '21:00',

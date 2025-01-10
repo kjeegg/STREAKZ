@@ -1,4 +1,5 @@
 class Habit {
+  final String id;        // <-- Новый уникальный идентификатор
   String title;
   List<bool> days;
   String time;
@@ -9,6 +10,7 @@ class Habit {
   bool isDone;
 
   Habit({
+    required this.id,     // теперь id обязателен в конструкторе
     required this.title,
     required this.days,
     required this.time,
@@ -21,6 +23,7 @@ class Habit {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,                         // сохраняем id в JSON
       'title': title,
       'days': days.map((d) => d ? 1 : 0).toList(),
       'time': time,
@@ -34,6 +37,7 @@ class Habit {
 
   static Habit fromMap(Map<String, dynamic> map) {
     return Habit(
+      id: map['id'] ?? '',              // загружаем id
       title: map['title'] ?? '',
       days: (map['days'] as List).map((e) => e == 1).toList(),
       time: map['time'] ?? '',
