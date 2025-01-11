@@ -153,28 +153,28 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                       context: context,
                       initialTime: TimeOfDay(hour: hour, minute: minute),
                       builder: (context, child) {
-                return Theme(
-                  data: ThemeData.light().copyWith(
-                    primaryColor: habitPrimary,
-                    timePickerTheme: TimePickerThemeData(
-                      dayPeriodColor: habitPrimary,
-                    ),
-                    colorScheme: ColorScheme.light(
-                      // change the border color
-                      primary: habitPrimary,
-                      // change the text color
-                      onSurface: habitText,
-                    ),
-                    // button colors 
-                    buttonTheme: ButtonThemeData(
-                      colorScheme: ColorScheme.light(
-                        primary: habitAccent2,
-                      ),
-                    ),
-                  ),
-                  child: child!,
-                );
-              },
+                        return Theme(
+                          data: ThemeData.light().copyWith(
+                            primaryColor: habitPrimary,
+                            timePickerTheme: TimePickerThemeData(
+                              dayPeriodColor: habitPrimary,
+                            ),
+                            colorScheme: ColorScheme.light(
+                              // change the border color
+                              primary: habitPrimary,
+                              // change the text color
+                              onSurface: habitText,
+                            ),
+                            // button colors
+                            buttonTheme: ButtonThemeData(
+                              colorScheme: ColorScheme.light(
+                                primary: habitAccent2,
+                              ),
+                            ),
+                          ),
+                          child: child!,
+                        );
+                      },
                     );
 
                     // Если пользователь выбрал время и нажал "ОК":
@@ -285,7 +285,8 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
             Center(
               child: ElevatedButton(
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(habitPrimary)),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(habitPrimary)),
                 onPressed: _saveHabit,
                 child: Text(
                   'Add Habit',

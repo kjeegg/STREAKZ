@@ -43,7 +43,6 @@ class _EditHabitScreenState extends State<EditHabitScreen> {
     }
   }
 
-
   Future<void> _updateHabit() async {
     if (_habit == null) return;
 
@@ -178,60 +177,83 @@ class _EditHabitScreenState extends State<EditHabitScreen> {
             ),
             const SizedBox(height: 30.0),
             // Время
-          // Внутри build, на месте вашего "Time" dropdown
-          Row(
-            children: [
-              Text(
-                'Time',
-                style: GoogleFonts.nunitoSans(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: habitText,
-                ),
-              ),
-              const SizedBox(width: 20.0),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: habitWhite,
-                ),
-                onPressed: () async {
-                  // Парсим текущее _time (в формате 'HH:mm') в TimeOfDay
-                  final parts = _time.split(':');
-                  final hour = int.tryParse(parts[0]) ?? 9;
-                  final minute = int.tryParse(parts[1]) ?? 0;
-
-                  // Показываем диалог выбора времени
-                  final TimeOfDay? pickedTime = await showTimePicker(
-                    context: context,
-                    initialTime: TimeOfDay(hour: hour, minute: minute),
-                  );
-
-                  // Если пользователь выбрал время и нажал "ОК":
-                  if (pickedTime != null) {
-                    setState(() {
-                      // Преобразуем обратно в строку "HH:mm"
-                      final hh = pickedTime.hour.toString().padLeft(2, '0');
-                      final mm = pickedTime.minute.toString().padLeft(2, '0');
-                      _time = '$hh:$mm';
-                      print('Выьранное время: $_time');
-                    });
-                  }
-                },
-                child: Text(
-                  (() {
-                    print('Отображаемое время: $_time'); // Выводим значение в консоль
-                    return _time;
-                  })(), // Используем анонимную функцию для выполнения логики
+            // Внутри build, на месте вашего "Time" dropdown
+            Row(
+              children: [
+                Text(
+                  'Time',
                   style: GoogleFonts.nunitoSans(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 20,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
                     color: habitText,
                   ),
                 ),
+                const SizedBox(width: 20.0),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: habitWhite,
+                  ),
+                  onPressed: () async {
+                    // Парсим текущее _time (в формате 'HH:mm') в TimeOfDay
+                    final parts = _time.split(':');
+                    final hour = int.tryParse(parts[0]) ?? 9;
+                    final minute = int.tryParse(parts[1]) ?? 0;
 
-              ),
-            ],
-          ),
+                    // Показываем диалог выбора времени
+                    final TimeOfDay? pickedTime = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay(hour: hour, minute: minute),
+                      builder: (context, child) {
+                        return Theme(
+                          data: ThemeData.light().copyWith(
+                            primaryColor: habitPrimary,
+                            timePickerTheme: TimePickerThemeData(
+                              dayPeriodColor: habitPrimary,
+                            ),
+                            colorScheme: ColorScheme.light(
+                              // change the border color
+                              primary: habitPrimary,
+                              // change the text color
+                              onSurface: habitText,
+                            ),
+                            // button colors
+                            buttonTheme: ButtonThemeData(
+                              colorScheme: ColorScheme.light(
+                                primary: habitAccent2,
+                              ),
+                            ),
+                          ),
+                          child: child!,
+                        );
+                      },
+                    );
+
+                    // Если пользователь выбрал время и нажал "ОК":
+                    if (pickedTime != null) {
+                      setState(() {
+                        // Преобразуем обратно в строку "HH:mm"
+                        final hh = pickedTime.hour.toString().padLeft(2, '0');
+                        final mm = pickedTime.minute.toString().padLeft(2, '0');
+                        _time = '$hh:$mm';
+                        print('Выьранное время: $_time');
+                      });
+                    }
+                  },
+                  child: Text(
+                    (() {
+                      print(
+                          'Отображаемое время: $_time'); // Выводим значение в консоль
+                      return _time;
+                    })(), // Используем анонимную функцию для выполнения логики
+                    style: GoogleFonts.nunitoSans(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                      color: habitText,
+                    ),
+                  ),
+                ),
+              ],
+            ),
 
             const SizedBox(height: 30.0),
             // Напоминание
