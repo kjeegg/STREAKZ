@@ -152,6 +152,29 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                     final TimeOfDay? pickedTime = await showTimePicker(
                       context: context,
                       initialTime: TimeOfDay(hour: hour, minute: minute),
+                      builder: (context, child) {
+                return Theme(
+                  data: ThemeData.light().copyWith(
+                    primaryColor: habitPrimary,
+                    timePickerTheme: TimePickerThemeData(
+                      dayPeriodColor: habitPrimary,
+                    ),
+                    colorScheme: ColorScheme.light(
+                      // change the border color
+                      primary: habitPrimary,
+                      // change the text color
+                      onSurface: habitText,
+                    ),
+                    // button colors 
+                    buttonTheme: ButtonThemeData(
+                      colorScheme: ColorScheme.light(
+                        primary: habitAccent2,
+                      ),
+                    ),
+                  ),
+                  child: child!,
+                );
+              },
                     );
 
                     // Если пользователь выбрал время и нажал "ОК":

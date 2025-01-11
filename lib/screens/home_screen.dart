@@ -168,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       });
                     },
                     child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
                       decoration: BoxDecoration(
                         color: isSelected ? habitPrimary : Colors.transparent,
                         borderRadius: BorderRadius.circular(10),
