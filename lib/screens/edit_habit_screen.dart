@@ -103,10 +103,22 @@ class _EditHabitScreenState extends State<EditHabitScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
+            padding: EdgeInsets.only(right: 40.0, top: 10.0),
+            icon: Image.asset(
+              'lib/assets/icons/trash.png',
+              width: 35.0,
+              height: 35.0,
+              ),
+            tooltip: 'Delete Habit',
+            onPressed: _deleteHabit,
+          ),
+        ],
         title: Text(
           'Edit Habit',
-          style: GoogleFonts.coiny(fontSize: 32, color: habitAccent2),
         ),
+        titleTextStyle: GoogleFonts.coiny(fontSize: 32, color: habitAccent2),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(top: 50.0, left: 30.0, right: 30.0),
@@ -355,11 +367,6 @@ class _EditHabitScreenState extends State<EditHabitScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              onPressed: _deleteHabit,
-              child: const Text('Delete'),
-            ),
           ],
         ),
       ),
