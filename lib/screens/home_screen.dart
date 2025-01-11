@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _xp = 0;
 
   // Список названий дней недели (по умолчанию: Понедельник = 0, ... , Воскресенье = 6)
-  final List<String> _weekdays = ['Mo','Tu','We','Th','Fr','Sa','Su'];
+  final List<String> _weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
   // Индекс выбранного дня недели (0..6). В DateTime: Mon=1..Sun=7, поэтому немного сдвигаем.
   late int _selectedDayIndex;
@@ -56,10 +56,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     // Текущее время и текущий месяц (без года)
     final now = DateTime.now();
-    final String currentMonthName = DateFormat.MMMM().format(now); // например, "January"
+    final String currentMonthName =
+        DateFormat.MMMM().format(now); // например, "January"
 
     // Найдём понедельник текущей недели (чтобы дни шли Mo..Su подряд):
-    final DateTime mondayThisWeek = now.subtract(Duration(days: now.weekday - 1));
+    final DateTime mondayThisWeek =
+        now.subtract(Duration(days: now.weekday - 1));
 
     // Фильтруем привычки, которые относятся к выбранному (_selectedDayIndex) дню
     final List<Habit> habitsForSelectedDay = _habits.where((habit) {
@@ -74,7 +76,8 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 50.0, left: 30.0, right: 30.0),
+              padding:
+                  const EdgeInsets.only(top: 50.0, left: 30.0, right: 30.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -135,72 +138,78 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 12),
 
-
-        Row(
-
-          children: [
-
-            Text(
-              currentMonthName,
-              style: GoogleFonts.nunitoSans(
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-                color: habitText,
-              ),
-            ),
-
-            //
-            const SizedBox(width: 16),
-
-            //
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: List.generate(7, (index) {
-                  final day = mondayThisWeek.add(Duration(days: index));
-                  final dayNum = day.day;
-                  final isSelected = (index == _selectedDayIndex);
-
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedDayIndex = index;
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
-                      decoration: BoxDecoration(
-                        color: isSelected ? habitPrimary : Colors.transparent,
-                        borderRadius: BorderRadius.circular(10),
+                  Row(
+                    children: [
+                      Text(
+                        currentMonthName,
+                        style: GoogleFonts.nunitoSans(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                          color: habitText,
+                        ),
                       ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min, // чтобы высота подстраивалась
-                        children: [
-                          Text(
-                            _weekdays[index], // Mo, Tu, ...
-                            style: GoogleFonts.nunitoSans(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                              color: isSelected ? Colors.black : habitText,
-                            ),
-                          ),
-                          Text(
-                            '$dayNum',
-                            style: GoogleFonts.nunitoSans(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                              color: isSelected ? Colors.black : habitText,
-                            ),
-                          ),
-                        ],
+
+                      //
+                      const SizedBox(width: 16),
+
+                      //
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: List.generate(7, (index) {
+                            final day =
+                                mondayThisWeek.add(Duration(days: index));
+                            final dayNum = day.day;
+                            final isSelected = (index == _selectedDayIndex);
+
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _selectedDayIndex = index;
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 6, horizontal: 6),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? habitPrimary
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize
+                                      .min, // чтобы высота подстраивалась
+                                  children: [
+                                    Text(
+                                      _weekdays[index], // Mo, Tu, ...
+                                      style: GoogleFonts.nunitoSans(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w700,
+                                        color: isSelected
+                                            ? Colors.black
+                                            : habitText,
+                                      ),
+                                    ),
+                                    Text(
+                                      '$dayNum',
+                                      style: GoogleFonts.nunitoSans(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w700,
+                                        color: isSelected
+                                            ? Colors.black
+                                            : habitText,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
                       ),
-                    ),
-                  );
-                }),
-              ),
-            ),
-          ],
-        ),
+                    ],
+                  ),
                   // -----------------------------
                   // Button Admin Panel
                   // -----------------------------
@@ -216,6 +225,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 16),
 
+                  habitsForSelectedDay.isEmpty
+                      ? Padding(
+                        padding: const EdgeInsets.only(top: 100),
+                        child: Text(
+                          textAlign: TextAlign.center,
+                            'You don\'t have any habits for the day, try creating a new habit by pressing the \'+\' button',
+                            style: GoogleFonts.nunitoSans(
+                              color: habitText,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                        ),
+                      )
+                      : SizedBox.shrink(),
+
                   // -----------------------------
                   //  (_selectedDayIndex)
                   // -----------------------------
@@ -227,7 +251,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         final textStyle = GoogleFonts.nunitoSans(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
-                          decoration: habit.isDone ? TextDecoration.lineThrough : null,
+                          decoration:
+                              habit.isDone ? TextDecoration.lineThrough : null,
                         );
                         return Container(
                           margin: const EdgeInsets.symmetric(vertical: 8),
@@ -325,13 +350,13 @@ class _HomeScreenState extends State<HomeScreen> {
       // FAB "All Habits" - если список не пуст
       floatingActionButton: _habits.isNotEmpty
           ? FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.pushNamed(context, '/allHabits');
-        },
-        label: const Text('All Habits'),
-        icon: const Icon(Icons.list),
-        backgroundColor: habitPrimary,
-      )
+              onPressed: () {
+                Navigator.pushNamed(context, '/allHabits');
+              },
+              label: const Text('All Habits'),
+              icon: const Icon(Icons.list),
+              backgroundColor: habitPrimary,
+            )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
