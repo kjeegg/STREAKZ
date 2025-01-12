@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "200505223293",
+    "project_id": "streakz-b0f55",
+    "storage_bucket": "streakz-b0f55.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:200505223293:android:16f4811d8407ba6b5f6914",
+        "android_client_info": {
+          "package_name": "streakz.prac.new_habit_tracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFW9LPaKgnl1EOUl26dlfJH8VdrSYFEo8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
