@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../services/local_storage_service.dart';
 import '../models/habit_model.dart';
 import 'package:habit_tracker_app/constants/colors.dart';
+import '../services/notification_service.dart';
+import 'package:uuid/uuid.dart';
 
 class AddHabitScreen extends StatefulWidget {
   const AddHabitScreen({Key? key}) : super(key: key);
@@ -14,287 +16,173 @@ class AddHabitScreen extends StatefulWidget {
 }
 
 class _AddHabitScreenState extends State<AddHabitScreen> {
-  final LocalStorageService _storageService = LocalStorageService();
+  final _formKey = GlobalKey<FormState>();
+  final _titleController = TextEditingController();
+  final List<bool> _selectedDays = List.generate(7, (index) => false);
+  bool _reminderEnabled = false;
+  TimeOfDay _reminderTime = const TimeOfDay(hour: 9, minute: 0);
+  final _notificationService = NotificationService();
 
-  final TextEditingController _titleController = TextEditingController();
-  List<bool> _days = [false, false, false, false, false, false, false];
-  String _time = '09:00';
-  String _reminder = 'Never';
-  int _colorIndex = 0;
+  @override
+  void dispose() {
+    _titleController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _selectTime() async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: _reminderTime,
+    );
+    if (picked != null && picked != _reminderTime) {
+      setState(() {
+        _reminderTime = picked;
+      });
+    }
+  }
 
   Future<void> _saveHabit() async {
-    // Генерируем уникальный id при создании
-    final newHabit = Habit(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      title: _titleController.text,
-      days: _days,
-      time: _time,
-      reminder: _reminder,
-      colorIndex: _colorIndex,
-    );
+    if (_formKey.currentState!.validate()) {
+      final habit = Habit(
+        id: const Uuid().v4(),
+        title: _titleController.text,
+        days: _selectedDays,
+        reminderEnabled: _reminderEnabled,
+        reminderTime: _reminderTime,
+      );
 
-    final habits = await _storageService.loadHabits();
-    habits.add(newHabit);
-    await _storageService.saveHabits(habits);
+      final storageService = LocalStorageService();
+      await storageService.saveHabit(habit);
 
-    Navigator.pop(context, true);
+      if (_reminderEnabled) {
+        await _notificationService.scheduleHabitNotification(habit);
+      }
+
+      if (mounted) {
+        Navigator.pop(context, true);
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final dayLabels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-    final colorOptions = [
-      Colors.red,
-      Colors.orange,
-      Colors.brown,
-      Colors.grey,
-      Colors.green,
-      Colors.purple,
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Add Habit',
-          style: GoogleFonts.coiny(fontSize: 32, color: habitAccent2),
+          'Add New Habit',
+          style: GoogleFonts.nunitoSans(
+            color: habitText,
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.only(top: 50.0, left: 30.0, right: 30.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: const EdgeInsets.all(16),
           children: [
-            // Название привычки
-            Text(
-              'I want to',
-              style: GoogleFonts.nunitoSans(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: habitText,
-              ),
-            ),
-            const SizedBox(height: 10.0),
-            TextField(
+            TextFormField(
               controller: _titleController,
+              decoration: InputDecoration(
+                labelText: 'Habit Title',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a title';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Select Days',
               style: GoogleFonts.nunitoSans(
                 fontSize: 18,
-                color: habitText,
-                fontWeight: FontWeight.bold,
-              ),
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: habitWhite,
-                hintText: 'Read 20 pages',
-                hintStyle: GoogleFonts.nunitoSans(
-                  fontSize: 18,
-                  color: habitGrey,
-                  fontWeight: FontWeight.bold,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-            const SizedBox(height: 30.0),
-            // Выбор дней
-            Text(
-              'When?',
-              style: GoogleFonts.nunitoSans(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 color: habitText,
               ),
             ),
-            const SizedBox(height: 10.0),
+            const SizedBox(height: 10),
             Wrap(
-              children: List.generate(7, (index) {
-                return ChoiceChip(
-                  disabledColor: habitWhite,
-                  selectedColor: habitPrimary,
-                  showCheckmark: false,
-                  shape: CircleBorder(),
-                  label: Text(dayLabels[index]),
-                  selected: _days[index],
-                  onSelected: (val) {
+              spacing: 8,
+              children: [
+                'Mo',
+                'Tu',
+                'We',
+                'Th',
+                'Fr',
+                'Sa',
+                'Su'
+              ].asMap().entries.map((entry) {
+                return FilterChip(
+                  label: Text(entry.value),
+                  selected: _selectedDays[entry.key],
+                  onSelected: (selected) {
                     setState(() {
-                      _days[index] = val;
+                      _selectedDays[entry.key] = selected;
                     });
                   },
                 );
-              }),
+              }).toList(),
             ),
-            const SizedBox(height: 30.0),
-            // Время (для упрощения - Dropdown)
-            // Внутри build, на месте вашего "Time" dropdown
-            Row(
-              children: [
-                Text(
-                  'Time',
-                  style: GoogleFonts.nunitoSans(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: habitText,
-                  ),
+            const SizedBox(height: 20),
+            SwitchListTile(
+              title: Text(
+                'Enable Reminder',
+                style: GoogleFonts.nunitoSans(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: habitText,
                 ),
-                const SizedBox(width: 20.0),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: habitWhite,
-                  ),
-                  onPressed: () async {
-                    // Парсим текущее _time (в формате 'HH:mm') в TimeOfDay
-                    final parts = _time.split(':');
-                    final hour = int.tryParse(parts[0]) ?? 9;
-                    final minute = int.tryParse(parts[1]) ?? 0;
-
-                    // Показываем диалог выбора времени
-                    final TimeOfDay? pickedTime = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay(hour: hour, minute: minute),
-                      builder: (context, child) {
-                        return Theme(
-                          data: ThemeData.light().copyWith(
-                            primaryColor: habitPrimary,
-                            timePickerTheme: TimePickerThemeData(
-                              dayPeriodColor: habitPrimary,
-                            ),
-                            colorScheme: ColorScheme.light(
-                              // change the border color
-                              primary: habitPrimary,
-                              // change the text color
-                              onSurface: habitText,
-                            ),
-                            // button colors
-                            buttonTheme: ButtonThemeData(
-                              colorScheme: ColorScheme.light(
-                                primary: habitAccent2,
-                              ),
-                            ),
-                          ),
-                          child: child!,
-                        );
-                      },
-                    );
-
-                    // Если пользователь выбрал время и нажал "ОК":
-                    if (pickedTime != null) {
-                      setState(() {
-                        // Преобразуем обратно в строку "HH:mm"
-                        final hh = pickedTime.hour.toString().padLeft(2, '0');
-                        final mm = pickedTime.minute.toString().padLeft(2, '0');
-                        _time = '$hh:$mm';
-                      });
-                    }
-                  },
-                  child: Text(
-                    _time, // Отображаем текущее значение в кнопке
-                    style: GoogleFonts.nunitoSans(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 20,
-                      color: habitText,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 30.0),
-            // Напоминание
-            Row(
-              children: [
-                Text(
-                  'Reminder',
-                  style: GoogleFonts.nunitoSans(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: habitText,
-                  ),
-                ),
-                const SizedBox(width: 20.0),
-                Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.0),
-                    color: habitWhite,
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      dropdownColor: habitWhite,
-                      style: GoogleFonts.nunitoSans(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 20,
-                        color: habitText,
-                      ),
-                      value: _reminder,
-                      items: ['Never', 'Once a day', 'Twice a day']
-                          .map(
-                              (r) => DropdownMenuItem(value: r, child: Text(r)))
-                          .toList(),
-                      onChanged: (val) {
-                        setState(() {
-                          _reminder = val ?? 'Never';
-                        });
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 30.0),
-            // Цвет
-            Text(
-              'Color',
-              style: GoogleFonts.nunitoSans(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: habitText,
               ),
+              value: _reminderEnabled,
+              onChanged: (value) {
+                setState(() {
+                  _reminderEnabled = value;
+                });
+              },
             ),
-
-            const SizedBox(height: 10.0),
-            Wrap(
-              children: List.generate(colorOptions.length, (index) {
-                final color = colorOptions[index];
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _colorIndex = index;
-                    });
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.all(4),
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: color,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        width: 3.0,
-                        color: _colorIndex == index
-                            ? Colors.black
-                            : Colors.transparent,
-                      ),
-                    ),
-                  ),
-                );
-              }),
-            ),
-            const SizedBox(height: 30.0),
-            Center(
-              child: ElevatedButton(
-                style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(habitPrimary)),
-                onPressed: _saveHabit,
-                child: Text(
-                  'Add Habit',
+            if (_reminderEnabled) ...[
+              ListTile(
+                title: Text(
+                  'Reminder Time',
                   style: GoogleFonts.nunitoSans(
-                    fontWeight: FontWeight.bold,
                     fontSize: 16,
+                    fontWeight: FontWeight.w600,
                     color: habitText,
                   ),
+                ),
+                subtitle: Text(
+                  _reminderTime.format(context),
+                  style: GoogleFonts.nunitoSans(
+                    fontSize: 14,
+                    color: habitText,
+                  ),
+                ),
+                trailing: const Icon(Icons.access_time),
+                onTap: _selectTime,
+              ),
+            ],
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _saveHabit,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: habitPrimary,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: Text(
+                'Save Habit',
+                style: GoogleFonts.nunitoSans(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
                 ),
               ),
             ),

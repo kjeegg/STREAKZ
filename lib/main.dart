@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 // Добавьте
-import 'package:firebase_core/firebase_core.dart';
 // Если генерировали файл с настройками автоматом flutterfire configure,
 // подключите его. Иначе можете использовать пустой Firebase.initializeApp().
 //import 'firebase_options.dart'; // <- если есть
@@ -14,6 +15,7 @@ import 'screens/admin_panel_screen.dart';
 import 'screens/main_screen.dart';
 import 'package:habit_tracker_app/constants/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'services/notification_service.dart';
 
 /// The main function initializes the app and runs the MyApp widget.
 void main() async {
@@ -23,11 +25,11 @@ void main() async {
   await SharedPreferences.getInstance();
 
   // Инициализация Firebase
-  await Firebase.initializeApp(
-    // Если у вас создан файл firebase_options.dart (через flutterfire),
-    // используйте его:
+  await Firebase.initializeApp();
 
-  );
+  // Инициализация сервиса уведомлений
+  final notificationService = NotificationService();
+  await notificationService.initialize();
 
   runApp(const MyApp());
 }

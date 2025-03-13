@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/local_storage_service.dart';
 import '../models/habit_model.dart';
+import '../services/notification_service.dart';
 
 class AdminPanelScreen extends StatefulWidget {
   const AdminPanelScreen({super.key});
@@ -11,6 +12,7 @@ class AdminPanelScreen extends StatefulWidget {
 
 class _AdminPanelScreenState extends State<AdminPanelScreen> {
   final LocalStorageService _storageService = LocalStorageService();
+  final NotificationService _notificationService = NotificationService();
   List<Habit> _habits = [];
 
   @override
@@ -28,8 +30,9 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
 
   Future<void> _clearAllHabits() async {
     await _storageService.saveHabits([]);
+    await _notificationService.cancelAllNotifications();
     await _loadHabits();
-    Navigator.pop(context, true); // Возвращаем true для обновления главного экрана
+    Navigator.pop(context, true);
   }
 
   Future<void> _addTestHabits() async {
@@ -41,7 +44,8 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
         title: 'Meditate 5 min (Test)',
         days: [true, false, true, false, true, false, false],
         time: '09:00',
-        reminder: 'Once a day',
+        reminderEnabled: true,
+        reminderTime: const TimeOfDay(hour: 9, minute: 0),
         colorIndex: 1,
       ),
       Habit(
@@ -49,7 +53,8 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
         title: 'Read 10 pages (Test)',
         days: [true, true, false, false, true, true, false],
         time: '21:00',
-        reminder: 'Never',
+        reminderEnabled: false,
+        reminderTime: const TimeOfDay(hour: 21, minute: 0),
         colorIndex: 0,
       ),
     ];
@@ -57,7 +62,30 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
     existingHabits.addAll(testHabits);
     await _storageService.saveHabits(existingHabits);
     await _loadHabits();
-    Navigator.pop(context, true); // Возвращаем true для обновления главного экрана
+    Navigator.pop(context, true);
+  }
+
+  Future<void> _sendTestNotification(Habit habit) async {
+    try {
+      await _notificationService.scheduleHabitNotification(habit);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Тестовое уведомление отправлено для: ${habit.title}'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ошибка при отправке уведомления: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -89,29 +117,53 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
             _habits.isEmpty
                 ? const Text('No habits in storage.')
                 : Column(
-              children: _habits.map((habit) {
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 8),
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
+                    children: _habits.map((habit) {
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 8),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.1),
+                              spreadRadius: 1,
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              habit.title,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text('Time: ${habit.time}'),
+                            Text('Reminder: ${habit.reminderEnabled ? "Enabled" : "Disabled"}'),
+                            if (habit.reminderEnabled)
+                              Text('Reminder Time: ${habit.reminderTime.format(context)}'),
+                            Text('Days: ${_formatDays(habit.days)}'),
+                            const SizedBox(height: 8),
+                            ElevatedButton.icon(
+                              onPressed: () => _sendTestNotification(habit),
+                              icon: const Icon(Icons.notifications),
+                              label: const Text('Send Test Notification'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue,
+                                foregroundColor: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        habit.title,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text('Time: ${habit.time}'),
-                      Text('Reminder: ${habit.reminder}'),
-                      Text('Days: ${_formatDays(habit.days)}'),
-                    ],
-                  ),
-                );
-              }).toList(),
-            ),
           ],
         ),
       ),
