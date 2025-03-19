@@ -7,37 +7,33 @@ Welcome to **Streakz**, the beautifully simple and engaging app designed to help
 ### 🏠 Home Screen
 Here you'll find all your daily habits neatly organized. See at a glance what's scheduled for today.
 
-![Screenshot_20250319_225921](https://github.com/user-attachments/assets/4280ae68-1ad9-40cc-8a6d-1f6e6fa9e12d)
-
+<img src="https://github.com/user-attachments/assets/4280ae68-1ad9-40cc-8a6d-1f6e6fa9e12d" width="300"/>
 
 ### ➕ Adding a New Habit
 Create a new habit by specifying the title, selecting days of the week, setting the reminder time, and personalizing the color.
 
-![Screenshot_20250319_225939](https://github.com/user-attachments/assets/351d04f1-51aa-43e7-898a-863dd0003cf2)
-
+<img src="https://github.com/user-attachments/assets/351d04f1-51aa-43e7-898a-863dd0003cf2" width="300"/>
 
 ### ✅ Habit Added
 Once added, your habit is easily accessible on the home screen. Mark it complete to maintain your streak!
 
-![Screenshot_20250319_225945](https://github.com/user-attachments/assets/af903399-0c79-45db-80a9-525807902f89)
-
+<img src="https://github.com/user-attachments/assets/af903399-0c79-45db-80a9-525807902f89" width="300"/>
 
 ### 📈 Track Your Streak
 Monitor your streaks and earn XP to level up. Stay motivated by seeing your longest streak clearly displayed.
 
-![Screenshot_20250319_225947](https://github.com/user-attachments/assets/b3195fc3-5ac4-41ac-a2d3-6cf06a9f64b8)
-
+<img src="https://github.com/user-attachments/assets/b3195fc3-5ac4-41ac-a2d3-6cf06a9f64b8" width="300"/>
 
 ### 🏆 Challenges
 Participate in exciting daily and weekly challenges that encourage you to keep your habits going strong.
 
-![Screenshot_20250319_225950](https://github.com/user-attachments/assets/f7bf0688-432a-48e6-b360-6289b976000b)
-
+<img src="https://github.com/user-attachments/assets/f7bf0688-432a-48e6-b360-6289b976000b" width="300"/>
 
 ### 🎖️ Achievements
 Unlock and collect achievements by maintaining your habits consistently. Celebrate your milestones and stay inspired!
 
-![Screenshot_20250319_225956](https://github.com/user-attachments/assets/846c2af8-2931-443d-b9df-48bcd0fe2b0b)
+<img src="https://github.com/user-attachments/assets/846c2af8-2931-443d-b9df-48bcd0fe2b0b" width="300"/>
+
 
 
 ## 🚀 Features
